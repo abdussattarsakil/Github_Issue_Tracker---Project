@@ -1,0 +1,14 @@
+* {
+    font-family: "Geist", sans-serif;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.divider::before,
+.divider::after {
+    height: 2px;
+}
