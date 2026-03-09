@@ -13,45 +13,39 @@ const loadData = () => {
 
 //btn toggling  
 const btn = (btnStatus) => {
-    console.log(btnStatus)
+    //console.log(btnStatus)
+    const cardContainer = document.getElementById("card-container")
+    cardContainer.innerHTML = ``;
+
+    let allCard = []
+
     if (btnStatus == "all") {
-        const cardContainer = document.getElementById("card-container")
-        cardContainer.innerHTML = ``;
 
-        const allCard=all
-        console.log(allCard)
+        allCard = all
+        //console.log(allCard)
 
-        allCard.forEach(card => {
-            cardContainer.append(card)
-        });
+
     }
-
 
     if (btnStatus == "open") {
-        const cardContainer = document.getElementById("card-container")
-        cardContainer.innerHTML = ``;
 
-        const allCard=open
+        allCard = open
         console.log(allCard)
 
-        allCard.forEach(card => {
-            cardContainer.append(card)
-        });
+        
     }
-
-
 
     if (btnStatus == "closed") {
-        const cardContainer = document.getElementById("card-container")
-        cardContainer.innerHTML = ``;
 
-        const allCard=closed
+        allCard = closed
         console.log(allCard)
 
-        allCard.forEach(card => {
-            cardContainer.append(card)
-        });
+
     }
+
+    allCard.forEach(card => {
+        cardContainer.append(card)
+    });
 }
 
 
