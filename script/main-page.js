@@ -4,7 +4,7 @@ const all = [];
 const open = [];
 const closed = [];
 
-const issueNum=document.getElementById("issueNum")
+const issueNum = document.getElementById("issueNum")
 
 
 const loadData = () => {
@@ -35,8 +35,8 @@ const btn = (btnStatus) => {
         allCard = all
         //console.log(allCard)
         allBtn.classList.add("btn-primary")
-        
-        issuesNum =issueNum.innerHTML=`${allCard.length}`
+
+        issuesNum = issueNum.innerHTML = `${allCard.length}`
 
     }
 
@@ -46,7 +46,7 @@ const btn = (btnStatus) => {
         console.log(open.length)
         openBtn.classList.add("btn-primary")
 
-        issueNum.innerHTML=`${allCard.length}`
+        issueNum.innerHTML = `${allCard.length}`
 
     }
 
@@ -57,7 +57,7 @@ const btn = (btnStatus) => {
         closedBtn.classList.add("btn-primary")
         console.log(allCard.length);
 
-        issueNum.innerHTML=`${allCard.length}`
+        issueNum.innerHTML = `${allCard.length}`
 
     }
 
@@ -111,7 +111,7 @@ const displayLoadData = (data) => {
         
         `
         // card er top border add 
-        info.status == "open" ? div.classList.add("border-t-4", "border-green-500", "rounded-xl") : div.classList.add("border-t-4", "border-red-500", "rounded-xl")
+        info.status == "open" ? div.classList.add("border-t-4", "border-green-500", "rounded-xl") : div.classList.add("border-t-4", "border-blue-500", "rounded-xl")
 
         cardContainer.append(div)
         all.push(div)
@@ -136,49 +136,60 @@ const displayLoadData = (data) => {
 //     "updatedAt": "2024-01-15T10:30:00Z"
 // }
 
-const loadCardDetail=(id)=>{
+const loadCardDetail = (id) => {
     console.log(id)
-    const url=`https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`
+    const url = `https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`
     fetch(url)
-    .then(res=>res.json())
-    .then(json=>displayModal(json))
+        .then(res => res.json())
+        .then(json => displayModal(json.data))
 }
 
-const displayModal=(card)=>{
-    console.log(card)
-    const modalContainer=document.getElementById("modalContainer")
-    modalContainer.innerHTML=`
-    <h1>Fix broken image uploads</h1>
-        <div class="flex gap-5">
-            <p>Opened</p>
-            <p>. Opened by Fahim Ahmed</p>
-            <p>. 22/02/2026</p>
-        </div>
-        <div class="flex gap-3">
-            <p class="text-blue-500 text-[12px] border border-blue-200 px-3 font-medium rounded-full py-1 bg-blue-50"><i
-                    class="fa-brands fa-readme"></i> Documentation</p>
+const displayModal = (info) => {
+    console.log(info)
+    const modalContainer = document.getElementById("modalContainer")
+    modalContainer.innerHTML = `
+   <h1 class="mt-2 font-bold text-2xl text-[#1F2937] mb-2">${info.title}</h1>
 
-            <P
-                class=" text-yellow-600 text-[12px] border border-yellow-200 px-3 font-medium rounded-full py-1 bg-yellow-50">
-                <i class="fa-solid fa-life-ring"></i> HELP WANTED
-            </P>
+        <div class="sm:flex gap-5 items-center">
+           ${info.status == "open" ? ` <p class="font-medium text-[12px] text-white bg-green-400 px-3  py-1 rounded-xl w-fit">Opened</p> ` 
+            :
+            `<p class="font-medium text-[12px] text-white bg-red-400 px-4 py-1 rounded-xl w-fit">Closed</p>`}
+            <p class="text-[12px] text-[#64748B]">Opened by <span>${info.author}</span></p>
+ 
+            <p class="text-[12px] text-[#64748B]">${info.createdAt.split("T")[0]}</p>
         </div>
-        
-        <p>The navigation menu doesn't collapse properly on mobile devices. Need to fix the responsive behavior.</p>
 
-        <div class="grid  grid-cols-2 w-11/12 mx-auto">
+        <div class="flex gap-1 lg:gap-3 my-4">
+            ${info.labels[0] == "bug" ? `<p class="text-red-500 text-[12px] border border-red-200 px-3 font-medium rounded-full py-1 bg-red-50" ><i class="fa-solid fa-bug"></i> BUG</p>` : ""}
+
+            ${info.labels[0] == "enhancement" ? `<p class="text-green-500 text-[12px] border border-green-200 px-3 font-medium rounded-full py-1 bg-green-50" ><i class="fa-solid fa-wand-magic-sparkles"></i> ENHANCEMENT</p>` : ""}
+
+            ${info.labels[0] == "documentation" ? `<p class="text-blue-500 text-[12px] border border-blue-200 px-3 font-medium rounded-full py-1 bg-blue-50" ><i class="fa-brands fa-readme"></i>  DOCUMENTATION</p>` : ""}
+                    
+
+            ${info.labels[1] ? `<P class="text-yellow-600 text-[12px] border border-yellow-200 px-3 font-medium rounded-full py-1 bg-yellow-50"><i class="fa-solid fa-life-ring"></i> HELP WANTED</P>` : ""}
+        </div>
+            <h3 class="my-2 text-[14px] text-[#64748B] mb-4">
+            ${info.description}</h3>
+
+        <div class="grid grid-cols-2 bg-gray-100 shadow-lg p-4 rounded-lg">
             <div>
-                <p>Assignee:</p>
-                <h2>Fahim Ahmed</h2>
+                <p class="text-gray-400">Assignee:</p>
+                ${info.assignee==""?`<h2 class="font-semibold text-  [#1F2937]">"Name Not Found"</h2>`: `<h2 class="font-semibold text-[#1F2937]">${info.assignee}</h2>`}
+               
             </div>
-            <div>
-                <p>Priority:</p>
-                <p class="font-medium text-[12px] text-gray-600 bg-gray-200 px-4 py-1 rounded-xl w-fit">LOW</p>
+            <div >
+                <p class="text-gray-400">Priority:</p>
+                ${info.priority == "high" ? ` <p class="font-medium text-[12px] text-red-500 bg-red-100 px-4 py-1 rounded-xl w-fit">HIGH</p> ` : ""}
+
+                ${info.priority == "medium" ? ` <p class="font-medium text-[12px] text-yellow-600 bg-yellow-100 px-4 py-1 rounded-xl w-fit">MEDIUM</p> ` : ""}
+
+                ${info.priority == "low" ? ` <p class="font-medium text-[12px] text-gray-600 bg-gray-300 px-4 py-1 rounded-xl w-fit">LOW</p> ` : ""}
             </div>
         </div>
     
     `;
-    
+
     document.getElementById("modal").showModal()
 }
 
