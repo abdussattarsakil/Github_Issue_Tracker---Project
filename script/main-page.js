@@ -20,11 +20,17 @@ const displayLoadData = (data) => {
 
         div.innerHTML = `
           
-            <div class=" bg-slate-50 shadow-lg p-6 h-full">
+            <div id="card" class=" bg-slate-50 shadow-lg p-6 h-full">
                 <div class="flex justify-between">
-                    <img src="assets/Open-Status.png">
-                    <p class="text-red-500 bg-red-100 px-5 rounded-xl">${info.priority}</p>
+                    <img src="assets/${info.status}-Status.png">
+                    ${info.priority=="high"?` <p class="font-medium text-[12px] text-red-500 bg-red-100 px-4 py-1 rounded-xl">HIGH</p> `:""}
+
+                    ${info.priority=="medium"?` <p class="font-medium text-[12px] text-yellow-600 bg-yellow-100 px-4 py-1 rounded-xl">MEDIUM</p> `:""}
+
+                    ${info.priority=="low"?` <p class="font-medium text-[12px] text-gray-600 bg-gray-200 px-4 py-1 rounded-xl">LOW</p> `:""}
                 </div>
+
+
                 <h1 class="mt-2 font-semibold text-sm">${info.title}</h1>
                 <h3 class="my-2 text-[12px] text-[#64748B]">
                 ${info.description}</h3>
@@ -45,6 +51,8 @@ const displayLoadData = (data) => {
             </div>
         
         `
+        // card er top border add 
+        info.status=="open"?div.classList.add("border-t-4", "border-green-500", "rounded-xl"):div.classList.add("border-t-4", "border-red-500", "rounded-xl")
 
         cardContainer.append(div)
     });
