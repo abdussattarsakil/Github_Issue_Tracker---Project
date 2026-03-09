@@ -12,3 +12,17 @@
 .divider::after {
     height: 2px;
 }
+
+.card-divider {
+    display: flex;
+    align-items: center;
+    margin:8px 0;
+}
+
+.card-divider::before,
+.card-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #cccc;
+}
