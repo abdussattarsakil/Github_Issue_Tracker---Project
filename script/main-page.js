@@ -141,8 +141,47 @@ const loadCardDetail=(id)=>{
     const url=`https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`
     fetch(url)
     .then(res=>res.json())
-    .then(json=>console.log(json))
+    .then(json=>displayModal(json))
 }
+
+const displayModal=(card)=>{
+    console.log(card)
+    const modalContainer=document.getElementById("modalContainer")
+    modalContainer.innerHTML=`
+    <h1>Fix broken image uploads</h1>
+        <div class="flex gap-5">
+            <p>Opened</p>
+            <p>. Opened by Fahim Ahmed</p>
+            <p>. 22/02/2026</p>
+        </div>
+        <div class="flex gap-3">
+            <p class="text-blue-500 text-[12px] border border-blue-200 px-3 font-medium rounded-full py-1 bg-blue-50"><i
+                    class="fa-brands fa-readme"></i> Documentation</p>
+
+            <P
+                class=" text-yellow-600 text-[12px] border border-yellow-200 px-3 font-medium rounded-full py-1 bg-yellow-50">
+                <i class="fa-solid fa-life-ring"></i> HELP WANTED
+            </P>
+        </div>
+        
+        <p>The navigation menu doesn't collapse properly on mobile devices. Need to fix the responsive behavior.</p>
+
+        <div class="grid  grid-cols-2 w-11/12 mx-auto">
+            <div>
+                <p>Assignee:</p>
+                <h2>Fahim Ahmed</h2>
+            </div>
+            <div>
+                <p>Priority:</p>
+                <p class="font-medium text-[12px] text-gray-600 bg-gray-200 px-4 py-1 rounded-xl w-fit">LOW</p>
+            </div>
+        </div>
+    
+    `;
+    
+    document.getElementById("modal").showModal()
+}
+
 
 
 loadData();
