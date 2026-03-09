@@ -39,29 +39,29 @@
 
     <main class="w-11/12 mx-auto mt-14">
         <!-- button -->
-        <div class="bg-slate-50 shadow-lg p-6">
-            <button id="allBtn" onclick="btn('all')" class="btn btn-primary px-10">
+        <div class="bg-slate-50 shadow-lg p-6 flex gap-2 sm:gap-5">
+            <button id="allBtn" onclick="btn('all')" class="btn btn-primary sm:px-10">
                 All
             </button>
 
-            <button id="openBtn" onclick="btn('open')" class="btn px-10">
+            <button id="openBtn" onclick="btn('open')" class="btn sm:px-10">
                 Open
             </button>
 
-            <button id="closedBtn" onclick="btn('closed')" class="btn  px-10">
+            <button id="closedBtn" onclick="btn('closed')" class="btn  sm:px-10">
                 Closed
             </button>
         </div>
 
         <!-- issues number show -->
-        <section class="flex justify-between mt-4 bg-slate-50 shadow-lg p-6 ">
+        <section class="sm:flex justify-between mt-4 bg-slate-50 shadow-lg p-6 ">
             <div class="flex gap-3 items-center">
                 <div>
                     <img class="" src="assets/Aperture.png" alt="">
                 </div>
                 <div>
                     <h1><span id="issueNum">50</span> Issues</h1>
-                    <p>Track and manage your project issues</p>
+                    <p class="text-[#64748B]">Track and manage your project issues</p>
                 </div>
 
             </div>
