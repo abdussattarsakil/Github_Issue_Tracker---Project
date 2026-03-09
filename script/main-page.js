@@ -4,10 +4,29 @@ const all = [];
 const open = [];
 const closed = [];
 
+const allInfo = [];
+
 const issueNum = document.getElementById("issueNum")
+
+const manageSpinner = (status) => {
+    const spinner = document.getElementById("spinner")
+    const cardContainer = document.getElementById("card-container")
+
+    if (status == true) {
+        spinner.classList.remove("hidden")
+        cardContainer.classList.add("hidden")
+    }
+
+    else {
+        spinner.classList.add("hidden")
+        cardContainer.classList.remove("hidden")
+    }
+
+}
 
 
 const loadData = () => {
+    manageSpinner(true);
     const url = `https://phi-lab-server.vercel.app/api/v1/lab/issues`
     fetch(url)
         .then(res => res.json())
@@ -16,6 +35,7 @@ const loadData = () => {
 
 //btn toggling  
 const btn = (btnStatus) => {
+    manageSpinner(true);
     //console.log(btnStatus)
     const cardContainer = document.getElementById("card-container")
     cardContainer.innerHTML = ``;
@@ -36,14 +56,14 @@ const btn = (btnStatus) => {
         //console.log(allCard)
         allBtn.classList.add("btn-primary")
 
-        issuesNum = issueNum.innerHTML = `${allCard.length}`
+        issueNum.innerHTML = `${allCard.length}`
 
     }
 
     if (btnStatus == "open") {
 
         allCard = open
-        console.log(open.length)
+        //console.log(open.length)
         openBtn.classList.add("btn-primary")
 
         issueNum.innerHTML = `${allCard.length}`
@@ -55,7 +75,7 @@ const btn = (btnStatus) => {
         allCard = closed
         //console.log(allCard)
         closedBtn.classList.add("btn-primary")
-        console.log(allCard.length);
+        //console.log(allCard.length);
 
         issueNum.innerHTML = `${allCard.length}`
 
@@ -63,6 +83,7 @@ const btn = (btnStatus) => {
 
     allCard.forEach(card => {
         cardContainer.append(card)
+        manageSpinner(false)
     });
 }
 
@@ -114,27 +135,15 @@ const displayLoadData = (data) => {
         info.status == "open" ? div.classList.add("border-t-4", "border-green-500", "rounded-xl") : div.classList.add("border-t-4", "border-blue-500", "rounded-xl")
 
         cardContainer.append(div)
+
+        manageSpinner(false)
+
         all.push(div)
         info.status == "open" ? open.push(div) : closed.push(div)
     });
 
 }
 
-// {
-//     "id": 1,
-//     "title": "Fix navigation menu on mobile devices",
-//     "description": "The navigation menu doesn't collapse properly on mobile devices. Need to fix the responsive behavior.",
-//     "status": "open",
-//     "labels": [
-//         "bug",
-//         "help wanted"
-//     ],
-//     "priority": "high",
-//     "author": "john_doe",
-//     "assignee": "jane_smith",
-//     "createdAt": "2024-01-15T10:30:00Z",
-//     "updatedAt": "2024-01-15T10:30:00Z"
-// }
 
 const loadCardDetail = (id) => {
     console.log(id)
@@ -151,7 +160,7 @@ const displayModal = (info) => {
    <h1 class="mt-2 font-bold text-2xl text-[#1F2937] mb-2">${info.title}</h1>
 
         <div class="sm:flex gap-5 items-center">
-           ${info.status == "open" ? ` <p class="font-medium text-[12px] text-white bg-green-400 px-3  py-1 rounded-xl w-fit">Opened</p> ` 
+           ${info.status == "open" ? ` <p class="font-medium text-[12px] text-white bg-green-400 px-3  py-1 rounded-xl w-fit">Opened</p> `
             :
             `<p class="font-medium text-[12px] text-white bg-red-400 px-4 py-1 rounded-xl w-fit">Closed</p>`}
             <p class="text-[12px] text-[#64748B]">Opened by <span>${info.author}</span></p>
@@ -175,7 +184,7 @@ const displayModal = (info) => {
         <div class="grid grid-cols-2 bg-gray-100 shadow-lg p-4 rounded-lg">
             <div>
                 <p class="text-gray-400">Assignee:</p>
-                ${info.assignee==""?`<h2 class="font-semibold text-  [#1F2937]">"Name Not Found"</h2>`: `<h2 class="font-semibold text-[#1F2937]">${info.assignee}</h2>`}
+                ${info.assignee == "" ? `<h2 class="font-semibold text-  [#1F2937]">"Name Not Found"</h2>` : `<h2 class="font-semibold text-[#1F2937]">${info.assignee}</h2>`}
                
             </div>
             <div >
@@ -196,4 +205,79 @@ const displayModal = (info) => {
 
 
 loadData();
-//console.log(all, open, closed);
+
+// search btn implement
+
+const handleSearch = event => {
+    //console.log(event.key)
+
+    manageSpinner(false)
+
+    const searchText = document.getElementById("search").value.trim().toLowerCase()
+    if (event.key == "Enter") {
+        const url =
+            ` https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q=${searchText}`
+
+        fetch(url)
+            .then(res => res.json())
+            .then(data => displaySearchResult(data.data))
+    }
+
+
+    const displaySearchResult = (data) => {
+        //console.log(data)
+        const cardContainer = document.getElementById("card-container")
+        cardContainer.innerHTML = ``;
+
+        data.forEach(info => {
+            //console.log(info);
+            allInfo.push(info)
+            const div = document.createElement("div");
+
+            div.innerHTML = `
+          
+            <div onclick="loadCardDetail(${info.id})" id="card" class=" bg-slate-50 shadow-lg p-6 h-full">
+                <div class="flex justify-between">
+                    <img src="assets/${info.status}-Status.png">
+                    ${info.priority == "high" ? ` <p class="font-medium text-[12px] text-red-500 bg-red-100 px-4 py-1 rounded-xl">HIGH</p> ` : ""}
+
+                    ${info.priority == "medium" ? ` <p class="font-medium text-[12px] text-yellow-600 bg-yellow-100 px-4 py-1 rounded-xl">MEDIUM</p> ` : ""}
+
+                    ${info.priority == "low" ? ` <p class="font-medium text-[12px] text-gray-600 bg-gray-200 px-4 py-1 rounded-xl">LOW</p> ` : ""}
+                </div>
+
+
+                <h1 class="mt-2 font-semibold text-sm">${info.title}</h1>
+                <h3 class="my-2 text-[12px] text-[#64748B]">
+                ${info.description}</h3>
+                <div class="flex gap-1 lg:gap-3 my-4">
+                    ${info.labels[0] == "bug" ? `<p class="text-red-500 text-[12px] border border-red-200 px-3 font-medium rounded-full py-1 bg-red-50" ><i class="fa-solid fa-bug"></i> BUG</p>` : ""}
+
+                    ${info.labels[0] == "enhancement" ? `<p class="text-green-500 text-[12px] border border-green-200 px-3 font-medium rounded-full py-1 bg-green-50" ><i class="fa-solid fa-wand-magic-sparkles"></i> ENHANCEMENT</p>` : ""}
+
+                    ${info.labels[0] == "documentation" ? `<p class="text-blue-500 text-[12px] border border-blue-200 px-3 font-medium rounded-full py-1 bg-blue-50" ><i class="fa-brands fa-readme"></i>  DOCUMENTATION</p>` : ""}
+                    
+
+                    ${info.labels[1] ? `<P class="text-yellow-600 text-[12px] border border-yellow-200 px-3 font-medium rounded-full py-1 bg-yellow-50"><i class="fa-solid fa-life-ring"></i> HELP WANTED</P>` : ""}
+                </div>
+                <div class="card-divider"></div>
+                <p class="text-[12px] text-[#64748B] my-2">#1 by<span>
+                ${info.author}</span></p>
+                <p class="text-[12px] text-[#64748B]">${info.createdAt.split("T")[0]}</p>
+            </div>
+        
+        `
+            // card er top border add 
+            info.status == "open" ? div.classList.add("border-t-4", "border-green-500", "rounded-xl") : div.classList.add("border-t-4", "border-blue-500", "rounded-xl")
+
+            cardContainer.append(div)
+            
+            issueNum.innerHTML=``;
+            issueNum.innerHTML = `${allInfo.length}`
+
+            manageSpinner(false)
+        });
+
+    }
+}
+
