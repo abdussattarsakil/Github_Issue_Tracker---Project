@@ -4,6 +4,9 @@ const all = [];
 const open = [];
 const closed = [];
 
+const issueNum=document.getElementById("issueNum")
+
+
 const loadData = () => {
     const url = `https://phi-lab-server.vercel.app/api/v1/lab/issues`
     fetch(url)
@@ -32,14 +35,18 @@ const btn = (btnStatus) => {
         allCard = all
         //console.log(allCard)
         allBtn.classList.add("btn-primary")
+        
+        issuesNum =issueNum.innerHTML=`${allCard.length}`
 
     }
 
     if (btnStatus == "open") {
 
         allCard = open
-        //console.log(allCard)
+        console.log(open.length)
         openBtn.classList.add("btn-primary")
+
+        issueNum.innerHTML=`${allCard.length}`
 
     }
 
@@ -48,6 +55,9 @@ const btn = (btnStatus) => {
         allCard = closed
         //console.log(allCard)
         closedBtn.classList.add("btn-primary")
+        console.log(allCard.length);
+
+        issueNum.innerHTML=`${allCard.length}`
 
     }
 
@@ -69,7 +79,7 @@ const displayLoadData = (data) => {
 
         div.innerHTML = `
           
-            <div id="card" class=" bg-slate-50 shadow-lg p-6 h-full">
+            <div onclick="loadCardDetail(${info.id})" id="card" class=" bg-slate-50 shadow-lg p-6 h-full">
                 <div class="flex justify-between">
                     <img src="assets/${info.status}-Status.png">
                     ${info.priority == "high" ? ` <p class="font-medium text-[12px] text-red-500 bg-red-100 px-4 py-1 rounded-xl">HIGH</p> ` : ""}
@@ -83,7 +93,7 @@ const displayLoadData = (data) => {
                 <h1 class="mt-2 font-semibold text-sm">${info.title}</h1>
                 <h3 class="my-2 text-[12px] text-[#64748B]">
                 ${info.description}</h3>
-                <div class="flex gap-1 lg:gap-3">
+                <div class="flex gap-1 lg:gap-3 my-4">
                     ${info.labels[0] == "bug" ? `<p class="text-red-500 text-[12px] border border-red-200 px-3 font-medium rounded-full py-1 bg-red-50" ><i class="fa-solid fa-bug"></i> BUG</p>` : ""}
 
                     ${info.labels[0] == "enhancement" ? `<p class="text-green-500 text-[12px] border border-green-200 px-3 font-medium rounded-full py-1 bg-green-50" ><i class="fa-solid fa-wand-magic-sparkles"></i> ENHANCEMENT</p>` : ""}
@@ -110,5 +120,30 @@ const displayLoadData = (data) => {
 
 }
 
+// {
+//     "id": 1,
+//     "title": "Fix navigation menu on mobile devices",
+//     "description": "The navigation menu doesn't collapse properly on mobile devices. Need to fix the responsive behavior.",
+//     "status": "open",
+//     "labels": [
+//         "bug",
+//         "help wanted"
+//     ],
+//     "priority": "high",
+//     "author": "john_doe",
+//     "assignee": "jane_smith",
+//     "createdAt": "2024-01-15T10:30:00Z",
+//     "updatedAt": "2024-01-15T10:30:00Z"
+// }
+
+const loadCardDetail=(id)=>{
+    console.log(id)
+    const url=`https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`
+    fetch(url)
+    .then(res=>res.json())
+    .then(json=>console.log(json))
+}
+
+
 loadData();
-console.log(all, open, closed);
+//console.log(all, open, closed);
