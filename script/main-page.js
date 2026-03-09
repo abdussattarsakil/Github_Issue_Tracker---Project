@@ -19,27 +19,35 @@ const btn = (btnStatus) => {
 
     let allCard = []
 
+    const allBtn = document.getElementById("allBtn")
+    const openBtn = document.getElementById("openBtn")
+    const closedBtn = document.getElementById("closedBtn")
+
+    allBtn.classList.remove("btn-primary")
+    openBtn.classList.remove("btn-primary")
+    closedBtn.classList.remove("btn-primary")
+
     if (btnStatus == "all") {
 
         allCard = all
         //console.log(allCard)
-
+        allBtn.classList.add("btn-primary")
 
     }
 
     if (btnStatus == "open") {
 
         allCard = open
-        console.log(allCard)
+        //console.log(allCard)
+        openBtn.classList.add("btn-primary")
 
-        
     }
 
     if (btnStatus == "closed") {
 
         allCard = closed
-        console.log(allCard)
-
+        //console.log(allCard)
+        closedBtn.classList.add("btn-primary")
 
     }
 
