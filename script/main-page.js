@@ -6,7 +6,7 @@ const closed = [];
 
 const allInfo = [];
 
-const issueNum = document.getElementById("issueNum")
+const issueNum = document.getElementById("issueNum");
 
 const manageSpinner = (status) => {
     const spinner = document.getElementById("spinner")
@@ -220,7 +220,14 @@ const handleSearch = event => {
 
         fetch(url)
             .then(res => res.json())
-            .then(data => displaySearchResult(data.data))
+            // .then(data => displaySearchResult(data.data))
+            .then(data => {
+                displaySearchResult(data.data)
+                issueNum.innerHTML = ``;
+                issueNum.innerHTML = `${data.data.length}`
+
+            })
+
     }
 
 
@@ -271,9 +278,9 @@ const handleSearch = event => {
             info.status == "open" ? div.classList.add("border-t-4", "border-green-500", "rounded-xl") : div.classList.add("border-t-4", "border-blue-500", "rounded-xl")
 
             cardContainer.append(div)
-            
-            issueNum.innerHTML=``;
-            issueNum.innerHTML = `${allInfo.length}`
+
+            // issueNum.innerHTML=``;
+            // issueNum.innerHTML = `${allInfo.length}`
 
             manageSpinner(false)
         });
